@@ -236,7 +236,10 @@
                 android:text="@string/bioText"
                 android:textSize="20sp" />
 
+
+
         </LinearLayout>
     </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

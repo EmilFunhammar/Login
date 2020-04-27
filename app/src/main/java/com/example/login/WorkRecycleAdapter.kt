@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class WorkRecycleAdapter(private val context: Context, private val workAdvertisement : List<Work>) : RecyclerView.Adapter<WorkRecycleAdapter.ViewHolder>() {
+class WorkRecycleAdapter(private val context: Context, private val work : List<Work>) :
+    RecyclerView.Adapter<WorkRecycleAdapter.ViewHolder>() {
 
     private val layoutInflater = LayoutInflater.from(context)
 
@@ -18,16 +19,17 @@ class WorkRecycleAdapter(private val context: Context, private val workAdvertise
     }
 
     override fun getItemCount(): Int {
-        return workAdvertisement.size
+        return work.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val advertisment = workAdvertisement[position]
-        holder.textViewTitle.text = advertisment.title
-        holder.textViewDecription.text = advertisment.description
-        holder.textViewSalary.text = advertisment.salary.toString()
+        val advertisement = work[position]
+        holder.textViewTitle.text = advertisement.title
+        holder.textViewDecription.text = advertisement.description
+        holder.textViewSalary.text = advertisement.salary.toString()
     }
 
+    // ViewHolder som håller i våran view. // kan bara användas i denna class
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val textViewTitle = itemView.findViewById<TextView>(R.id.titleText)
         val textViewDecription = itemView.findViewById<TextView>(R.id.decriptionText)

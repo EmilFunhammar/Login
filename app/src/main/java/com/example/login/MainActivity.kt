@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null){
             if (currentUser.isEmailVerified) {
-                val intent = Intent(this, ProfilActivity::class.java)
+                val intent = Intent(this, HeadActivity::class.java)
                 intent.putExtra("currentUser", "emil macbook pro")
                 startActivity(intent)
                 finish()

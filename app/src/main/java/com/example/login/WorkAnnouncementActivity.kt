@@ -13,7 +13,7 @@ class WorkAnnouncementActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_work_announcement)
+        setContentView(R.layout.activity_work_editor)
 
         val saveButton = findViewById<Button>(R.id.save_Button)
         salary = findViewById<EditText>(R.id.salaryNumber)

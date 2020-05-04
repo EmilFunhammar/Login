@@ -6,6 +6,7 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_sign_up_layout.*
@@ -49,7 +50,7 @@ class SignUpActivity : AppCompatActivity() {
                         user?.sendEmailVerification()
                             ?.addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
-                                startActivity(Intent(this,MainActivity::class.java))
+                                startActivity(Intent(this,HeadActivity::class.java))
                                 finish()
                                     Log.d("mail", "Email sent.")
                                 }

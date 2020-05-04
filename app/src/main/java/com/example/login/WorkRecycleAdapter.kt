@@ -1,11 +1,16 @@
 package com.example.login
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 
 class WorkRecycleAdapter(private val context: Context, private val work : List<Work>) :
     RecyclerView.Adapter<WorkRecycleAdapter.ViewHolder>() {
@@ -26,15 +31,29 @@ class WorkRecycleAdapter(private val context: Context, private val work : List<W
         val advertisement = work[position]
         holder.textViewTitle.text = advertisement.title
         holder.textViewDecription.text = advertisement.description
-        holder.textViewSalary.text = advertisement.salary.toString()
+        holder.textViewSalary.text = advertisement.salary
+        holder.workPosition = position
     }
 
-    // ViewHolder som håller i våran view. // kan bara användas i denna class
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val textViewTitle = itemView.findViewById<TextView>(R.id.titleText)
         val textViewDecription = itemView.findViewById<TextView>(R.id.decriptionText)
         val textViewSalary = itemView.findViewById<TextView>(R.id.salaryText)
+        var workPosition = 0
+
+        init {
+            itemView.setOnClickListener {
+                val intent = Intent(context, WorkDisplayPageActivity::class.java)
+                intent.putExtra(Work_POSETION_KEY, workPosition)
+                context.startActivity(intent)
+            }
+        }
+           // itemView.setOnClickListener{
+            //    val intent = Intent(context, AddAndCreateStudentActivity::class.java)
+             //   intent.putExtra(STUDENT_POSETION_KEY, studentPosition)
+              //  context.startActivity(intent)
+        }
     }
 
 
-}
+

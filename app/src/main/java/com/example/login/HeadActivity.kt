@@ -1,19 +1,17 @@
 package com.example.login
 
+import android.app.LauncherActivity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.Toolbar
-import androidx.appcompat.app.ActionBar
+import android.widget.ListView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.firebase.auth.FirebaseAuth
+
+
 
 class HeadActivity : AppCompatActivity() {
     // initaliserar var recyclerView
@@ -35,6 +33,7 @@ class HeadActivity : AppCompatActivity() {
         fab.setOnClickListener { view ->
             intent = Intent(this, WorkAnnouncementActivity::class.java)
             startActivity(intent)
+            Log.d("!!!","emil")
         }
 
         val accountItem = findViewById<View>(R.id.accountItem)
@@ -43,10 +42,9 @@ class HeadActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //val locationItem = findViewById<View>(R.id.locationItem)
-        //locationItem.setOnClickListener {
-       //     intent = Intent(this, )
-       // }
+        val locationItem = findViewById<View>(R.id.locationItem)
+        locationItem.setOnClickListener {
+        }
 
         val bussinesItem = findViewById<View>(R.id.bussniesItem)
         bussinesItem.setOnClickListener {
@@ -54,9 +52,21 @@ class HeadActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-       // val messageItem = findViewById<View>(R.id.messageItem)
-       // messageItem.setOnClickListener {
-        // }
+        val messageItem = findViewById<View>(R.id.messageItem)
+        messageItem.setOnClickListener {
+         }
+
+        //val advertisement = findViewById<View>(R.id.recycleViewCard)
+        //advertisement.setOnClickListener {
+         //   intent = Intent(this, WorkDisplayPageActivity::class.java)
+          //  startActivity(intent)
+       //}
+
+        //val a = findViewById<ListView>(R.id.recycleViewCard)
+        //a.setOnClickListener{
+          //  Log.d("!!!", "a clickt")
+        //}
+
 
 
     }

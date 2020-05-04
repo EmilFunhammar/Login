@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Title" />
 
     <EditText
-        android:id="@+id/location"
+        android:id="@+id/addLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
@@ -42,6 +42,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/lineView"
         app:layout_constraintTop_toBottomOf="@+id/workTitle" />
+
+    <EditText
+        android:id="@+id/work_Dicription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Desctiption"
+        android:inputType="textPersonName"
+        android:singleLine="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addLocation" />
+
+    <EditText
+        android:id="@+id/salaryNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Salary"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/work_Dicription" />
 
     <View
         android:id="@+id/lineView"
@@ -69,18 +94,6 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextName" />
 
     <EditText
-        android:id="@+id/editText4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Email :"
-        android:inputType="textEmailAddress"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPhoneNummber" />
-
-    <EditText
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -104,6 +117,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lineView" />
 
+    <EditText
+        android:id="@+id/editEmailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Email :"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPhoneNummber" />
+
     <Button
         android:id="@+id/save_Button"
         android:layout_width="match_parent"
@@ -115,30 +140,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/work_Dicription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Desctiption"
-        android:inputType="textPersonName"
-        android:singleLine="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location" />
-
-    <EditText
-        android:id="@+id/salaryNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Salary"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/work_Dicription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

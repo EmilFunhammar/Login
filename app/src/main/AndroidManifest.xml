@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WorkDisplayPageActivity"></activity>
-        <activity android:name=".ProfilEditorActivity"></activity>
+        <activity android:name=".WorkDisplayPageActivity"/>
+        <activity android:name=".ProfilEditorActivity"/>
         <activity android:name=".WorkAnnouncementActivity" />
         <activity android:name=".HeadActivity" />
         <activity android:name=".ProfilActivity" />

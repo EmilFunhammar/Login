@@ -11,11 +11,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class WorkRecycleAdapter(private val context: Context, private val work : List<Work>) :
     RecyclerView.Adapter<WorkRecycleAdapter.ViewHolder>() {
 
     private val layoutInflater = LayoutInflater.from(context)
+
+    lateinit var db : FirebaseFirestore
+    lateinit var auth: FirebaseAuth
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,7 +33,33 @@ class WorkRecycleAdapter(private val context: Context, private val work : List<W
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+
         val advertisement = work[position]
+
+      /*  val shoppingItems = mutableListOf<Work>()
+
+        val itemsRef = db.collection("work").document(user!!.uid).collection("workInforamtion")
+
+        itemsRef.addSnapshotListener { snapshot, e ->
+            if( snapshot != null ) {
+                println("emil : Inne")
+                shoppingItems.clear()
+                for(document in snapshot.documents) {
+                    val newItem = document.toObject(Work::class.java)
+                    if (newItem != null)
+                        shoppingItems.add(newItem)
+                    // println("!!! : ${newItem}")
+                    println("emil1 : ${newItem!!.description}")
+
+                    // langText2.text = newItem.profilName
+
+                }
+            }
+        }*/
         holder.textViewTitle.text = advertisement.title
         holder.textViewDecription.text = advertisement.description
         holder.textViewSalary.text = advertisement.salary
@@ -52,6 +83,7 @@ class WorkRecycleAdapter(private val context: Context, private val work : List<W
             //    val intent = Intent(context, AddAndCreateStudentActivity::class.java)
              //   intent.putExtra(STUDENT_POSETION_KEY, studentPosition)
               //  context.startActivity(intent)
+
         }
     }
 

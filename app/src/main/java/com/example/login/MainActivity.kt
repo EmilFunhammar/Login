@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -17,24 +19,30 @@ import kotlinx.android.synthetic.main.activity_sign_up_layout.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    lateinit var email : EditText
+    lateinit var password : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        email = findViewById(R.id.email)
+        password = findViewById(R.id.password)
         auth = FirebaseAuth.getInstance()
+        val signInButton = findViewById<Button>(R.id.signInButton)
+        signInButton.setOnClickListener{
+            doLogin()
+        }
+
 
         signUpButton.setOnClickListener{
             startActivity(Intent(this, SignUpActivity::class.java))
         }
 
-        signInButton.setOnClickListener{
-            doLogin()
-        }
+
 
     }
 
-
-    private fun doLogin() {
+    fun doLogin() {
         if (email.text.toString().isEmpty()) {
             email.error = "ange Emailadress"
             email.requestFocus()

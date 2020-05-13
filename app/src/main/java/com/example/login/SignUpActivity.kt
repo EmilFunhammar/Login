@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +15,8 @@ import kotlinx.android.synthetic.main.activity_sign_up_layout.*
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    var stat : Boolean = false
+    var type : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,9 +24,23 @@ class SignUpActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         signUpButton.setOnClickListener{
+            status()
             signUpUser()
-
         }
+
+        val employerCheckBox = findViewById<CheckBox>(R.id.checkEmployerBox)
+        val workerCheckBox = findViewById<CheckBox>(R.id.checkWorkerBox)
+
+    }
+
+    fun status(){
+       if (checkEmployerBox.isChecked){
+           type = "employer"
+       }
+        if (checkWorkerBox.isChecked){
+            type = "worker"
+        }
+        return
     }
 
   private fun signUpUser(){
@@ -50,7 +67,7 @@ class SignUpActivity : AppCompatActivity() {
                         user?.sendEmailVerification()
                             ?.addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
-                                startActivity(Intent(this,HeadActivity::class.java))
+                                startActivity(Intent(this, MainActivity::class.java))
                                 finish()
                                     Log.d("mail", "Email sent.")
                                 }

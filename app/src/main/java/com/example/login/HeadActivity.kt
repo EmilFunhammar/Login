@@ -29,11 +29,10 @@ class HeadActivity : AppCompatActivity() {
         //sätter adaptern till min WorkList och skickar med this
         recycleView.adapter = WorkRecycleAdapter(this, DataManger.workList)
 
-        val fab = findViewById<View>(R.id.floatingActionButton2)
-        fab.setOnClickListener { view ->
+        val fab1 = findViewById<View>(R.id.floatingActionButton2)
+        fab1.setOnClickListener { view ->
             intent = Intent(this, WorkAnnouncementActivity::class.java)
             startActivity(intent)
-            Log.d("!!!","emil")
         }
 
         val accountItem = findViewById<View>(R.id.accountItem)

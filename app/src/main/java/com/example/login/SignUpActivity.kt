@@ -7,15 +7,14 @@ import android.util.Patterns
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_sign_up_layout.*
+
 
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    var stat : Boolean = false
     var type : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +29,7 @@ class SignUpActivity : AppCompatActivity() {
 
         val employerCheckBox = findViewById<CheckBox>(R.id.checkEmployerBox)
         val workerCheckBox = findViewById<CheckBox>(R.id.checkWorkerBox)
+
 
     }
 
@@ -60,23 +60,35 @@ class SignUpActivity : AppCompatActivity() {
                 return
             }
 
-            auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        val user = auth.currentUser
-                        user?.sendEmailVerification()
-                            ?.addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                startActivity(Intent(this, MainActivity::class.java))
-                                finish()
-                                    Log.d("mail", "Email sent.")
-                                }
-                            }
+      auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
+          .addOnCompleteListener(this) { task ->
+              if (task.isSuccessful) {
+                  val user = auth.currentUser
+                  user?.sendEmailVerification()
+                      ?.addOnCompleteListener { task ->
+                          if (task.isSuccessful) {
+                              val db = FirebaseFirestore.getInstance()
 
-                    } else {
-                        Toast.makeText(baseContext, "registrering misslyckad. Try agian",
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }
-    }
+                              val profil = Profil(workType = type)
+                              db.collection("Users").document(user.uid).set(profil)
+                                  .addOnCompleteListener { task ->
+                                      //
+                                  }
+
+                              startActivity(Intent(this, MainActivity::class.java))
+
+                              Log.d("mail", "Email sent.")
+                          }
+                      }
+
+              }else {
+                  Toast.makeText(baseContext, "registrering misslyckad. Try agian",
+                      Toast.LENGTH_SHORT).show()
+
+              }
+
+          }
+  }
+
+
 }

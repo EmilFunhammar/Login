@@ -10,22 +10,28 @@
         >
     </item>
 
-    <item android:id="@+id/locationItem"
-        android:title="Maps"
+    <item
+        android:id="@+id/locationItem"
         android:icon="@drawable/ic_location_on"
-        app:showAsAction="always">
-    </item>
+        android:title="Maps"
+        app:showAsAction="ifRoom"></item>
 
-    <item android:id="@+id/bussniesItem"
-        android:title="Affärer"
+    <item
+        android:id="@+id/bussniesItem"
         android:icon="@drawable/ic_business_center"
-        app:showAsAction="always">
-    </item>
+        android:title="Affärer"
+        app:showAsAction="ifRoom"></item>
 
-    <item android:id="@+id/messageItem"
-        android:title="Meddelande"
+    <item
+        android:id="@+id/messageItem"
         android:icon="@drawable/ic_email"
-        app:showAsAction="always">
+        android:title="Meddelande"
+        app:showAsAction="ifRoom">
 
     </item>
+    <item
+        android:id="@+id/signOutItem"
+        android:icon="@drawable/ic_power_settings_new_black_24dp"
+        android:title="sign_out"
+        app:showAsAction="ifRoom" />
 </menu>

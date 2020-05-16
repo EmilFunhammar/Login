@@ -2,13 +2,10 @@ package com.example.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_profil_editor.*
-import kotlinx.android.synthetic.main.activity_work_editor.*
 
 class WorkAnnouncementActivity : AppCompatActivity() {
 
@@ -22,10 +19,12 @@ class WorkAnnouncementActivity : AppCompatActivity() {
     lateinit var emailAdressText : EditText
     lateinit var db : FirebaseFirestore
     lateinit var auth: FirebaseAuth
+    //lateinit var workList : MutableList<Work>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_work_editor)
+
 
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
@@ -45,23 +44,6 @@ class WorkAnnouncementActivity : AppCompatActivity() {
          }
     }
 
-   /* fun addNewJob(){
-
-        val workTitle = titleText.text.toString()
-        val workSalary = salaryText.text.toString()
-        val workDescription = descriptionText.text.toString()
-        val workLocation = locationText.text.toString()
-        val employerName = nameText.text.toString()
-        val employerPhoneNumber = phoneNUmber.text.toString()
-        val employerEmail = emailAdressText.text.toString()
-
-
-        val addWork = Work(workTitle, workSalary, workDescription, workLocation,
-            employerName, employerPhoneNumber, employerEmail)
-
-        DataManger.workList.add(addWork)
-            finish()
-    }*/
 
     fun addNewJob(){
 
@@ -77,12 +59,13 @@ class WorkAnnouncementActivity : AppCompatActivity() {
             if (user == null)
                 return
 
-            db.collection("work").document(user!!.uid).collection("workInformation").add(workInfrormation)
-                .addOnSuccessListener { println("!!!: complete")}
+            db.collection("work").document(user!!.uid).collection("workInfo").add(workInfrormation)
+                .addOnSuccessListener { println("!!!: complete")
+                    DataManger.work.add(workInfrormation)}
                 .addOnCanceledListener { println("!!!: cancel")}
                 .addOnSuccessListener { println("!!!: write")
-                    DataManger.workList.add(workInfrormation)
-                    finish()
+                    //DataManger.work.add(workInfrormation)
+                   // finish()
                 }
                 .addOnFailureListener{ println("!!!: did not write")}
 

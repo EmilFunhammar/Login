@@ -21,6 +21,7 @@ class WorkDisplayPageActivity : AppCompatActivity() {
     lateinit var employerName : TextView
     lateinit var employerPhoneNumber : TextView
     lateinit var employerEmail : TextView
+    lateinit var workList : MutableList<Work>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +40,11 @@ class WorkDisplayPageActivity : AppCompatActivity() {
         workSalary = findViewById<TextView>(R.id.displaySalaryText)
 
         val studentPosition = intent.getIntExtra(Work_POSETION_KEY, POSITION_NOT_SET)
-        displayWork2(studentPosition)
+        displayWork(studentPosition)
     }
 
     fun displayWork(position: Int){
-        val work = DataManger.workList[position]
+        val work =  DataManger.work[position]
         workTitle.text = work.title
         workDescription.text = work.description
         workSalary.text = work.salary
@@ -53,28 +54,55 @@ class WorkDisplayPageActivity : AppCompatActivity() {
         employerEmail.text = work.employerEmail
     }
 
-    fun displayWork2(studentPosition: Int) {
+   /* fun displayWork2(studentPosition: Int) {
 
         val shoppingItems = mutableListOf<Work>()
 
         val user = auth.currentUser
-        val itemsRef = db.collection("Users").document(user!!.uid).collection("userInformation")
+        val itemsRef = db.collection("work").document(user!!.uid)
+            .collection("workInfo")
 
         itemsRef.addSnapshotListener { snapshot, e ->
             if( snapshot != null ) {
-                println("emil : Inne")
                 shoppingItems.clear()
                 for(document in snapshot.documents) {
                     val newItem = document.toObject(Work::class.java)
                     if (newItem != null)
                         shoppingItems.add(newItem)
-                    // println("!!! : ${newItem}")
-                    println("emil : ${newItem!!.description}")
+                }
+            }
+        }
+    }*/
 
-                    // langText2.text = newItem.profilName
+   /* fun set(){
+        val user = auth.currentUser ?: return
+        val workList = mutableListOf<Work>()
+        val workRef = db.collection("work").document(user.uid)
 
+        workRef.addSnapshotListener { snapshot, e ->
+            if (snapshot != null) {
+                workList.clear()
+                val newItem = snapshot.toObject(Work::class.java)
+                if (newItem != null) {
+                    workList.add(newItem)
+                    setProfilInfo(newItem)
                 }
             }
         }
     }
+
+
+    fun setProfilInfo(newItem: Work) {
+        //val work = DataManger.workList[position]
+        workTitle.text = newItem.employerName
+        /*workDescription.text = work.description
+        workSalary.text = work.salary
+        workLocation.text = work.workLocation
+        employerName.text = work.employerName
+        employerPhoneNumber.text = work.employerPhoneNumber
+        employerEmail.text = work.employerEmail
+
+    }*/
+    */
+
 }

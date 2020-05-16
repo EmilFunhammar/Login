@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     lateinit var email : EditText
     lateinit var password : EditText
+    lateinit var value : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
        super.onStart()
         val currentUser = auth.currentUser
         updateUI(currentUser)
+
     }
 
     private fun updateUI(currentUser: FirebaseUser?) {
@@ -82,7 +84,6 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, HeadActivity::class.java)
                 intent.putExtra("currentUser", "emil macbook pro")
                 startActivity(intent)
-                finish()
             }else{Toast.makeText(baseContext, "verifay email adress",
                 Toast.LENGTH_SHORT).show()
             }

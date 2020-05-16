@@ -19,7 +19,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="ExtraText">
+
+            <ImageView
+                android:id="@+id/profilPicture"
+                android:layout_width="match_parent"
+                android:layout_height="275dp"
+                android:contentDescription="@string/profilPicture"
+                app:srcCompat="@drawable/dog" />
 
             <TextView
                 android:id="@+id/rubrik"
@@ -29,18 +37,10 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="18dp"
                 android:gravity="center|start"
-                android:hint="Emil Funhammar"
                 android:text=""
                 android:textColor="#000000"
                 android:textSize="30sp"
                 android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/profilPicture"
-                android:layout_width="match_parent"
-                android:layout_height="275dp"
-                android:contentDescription="@string/profilPicture"
-                app:srcCompat="@drawable/dog" />
 
             <View
                 android:id="@+id/lineView"
@@ -81,7 +81,6 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="18dp"
-                android:text="5 Uppdrag utförda"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -93,18 +92,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
                 android:background="#000000" />
-
-            <TextView
-                android:id="@+id/aboutMe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|start"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="18dp"
-                android:text="Om Emil Funhammar"
-                android:textColor="#000000"
-                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/lang"
@@ -125,7 +112,6 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center|start"
-                android:text="Svenska"
                 android:textColor="#000000"
                 android:textSize="17sp" />
 
@@ -136,7 +122,6 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center|start"
-                android:text="Engelska"
                 android:textColor="#000000"
                 android:textSize="17sp" />
 
@@ -147,18 +132,16 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center|start"
-                android:text="Spanska"
                 android:textColor="#000000"
                 android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/genarall"
+                android:id="@+id/GeneralAboutMe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center|start"
-                android:text="@string/other_info"
                 android:textColor="#000000"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -170,18 +153,6 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center|start"
-                android:text="Am Körkort"
-                android:textColor="#000000"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/generall2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="5dp"
-                android:gravity="center|start"
-                android:text="kunskaper inom bygg"
                 android:textColor="#000000"
                 android:textSize="17sp" />
 
@@ -192,7 +163,16 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center|start"
-                android:text="Tom"
+                android:textColor="#000000"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/generall2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center|start"
                 android:textColor="#000000"
                 android:textSize="17sp" />
 
@@ -203,7 +183,6 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center|start"
-                android:text="Tom"
                 android:textColor="#000000"
                 android:textSize="17sp" />
 
@@ -235,7 +214,6 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="30dp"
-                android:text="@string/bioText"
                 android:textSize="20sp" />
 
         </LinearLayout>
@@ -251,6 +229,17 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomAppBars"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_black_24dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonProfilPage2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomAppBars"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_person" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBars"

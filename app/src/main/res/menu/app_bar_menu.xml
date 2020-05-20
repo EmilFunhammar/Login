@@ -2,35 +2,32 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <item android:id="@+id/accountItem"
-        android:icon="@drawable/ic_person"
-        android:title="Profil"
-        app:showAsAction="always"
-        >
-    </item>
-
     <item
         android:id="@+id/locationItem"
         android:icon="@drawable/ic_location_on"
         android:title="Maps"
-        app:showAsAction="ifRoom"></item>
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/accountItem"
+        android:icon="@drawable/ic_person"
+        android:title="profil"
+        app:showAsAction="ifRoom" />
+
 
     <item
         android:id="@+id/bussniesItem"
         android:icon="@drawable/ic_business_center"
         android:title="Affärer"
-        app:showAsAction="ifRoom"></item>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/messageItem"
         android:icon="@drawable/ic_email"
         android:title="Meddelande"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always"/>
 
-    </item>
     <item
-        android:id="@+id/signOutItem"
+        android:id="@+id/sign_Out_Item"
         android:icon="@drawable/ic_power_settings_new_black_24dp"
         android:title="sign_out"
         app:showAsAction="ifRoom" />

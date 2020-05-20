@@ -40,6 +40,12 @@ class ProfilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profil)
 
+
+        try {
+            this.supportActionBar!!.hide()
+        } catch (e: NullPointerException) {
+        }
+
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
@@ -61,18 +67,11 @@ class ProfilActivity : AppCompatActivity() {
         set()
 
 
-        val fab2 = findViewById<View>(R.id.floatingActionButtonProfilPage2)
         val fab = findViewById<View>(R.id.floatingActionButtonProfilPage)
         fab.setOnClickListener {
             fab()
         }
 
-       /* fab2.setOnClickListener {
-            auth.signOut()
-            println("!!! : Signing out")
-            intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }*/
     }
 
 
@@ -101,7 +100,7 @@ class ProfilActivity : AppCompatActivity() {
 
     fun setProfilInfo(newItem : Profil) {
         profilTitleText.text = newItem.profilName
-        ratingBar.numStars = 5
+        ratingBar.numStars = 4
         // här
         taskPreformd.text = newItem.workType
         langText1.text = newItem.editLanguage1
@@ -139,6 +138,7 @@ class ProfilActivity : AppCompatActivity() {
     }
 
     fun displayPreofilPage(){
+        ratingBar.rating = 4F
         if (langText1.text == ""){
             lang1.visibility = View.GONE
         }

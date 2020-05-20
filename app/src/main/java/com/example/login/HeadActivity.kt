@@ -1,21 +1,22 @@
 package com.example.login
 
-import android.annotation.SuppressLint
+import DataManger
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.login.R.*
-import com.google.android.gms.tasks.Task
+import com.example.login.R.id
+import com.example.login.R.layout
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_head.*
+import kotlinx.android.synthetic.main.activity_profil.*
 
 
 class HeadActivity : AppCompatActivity() {
@@ -24,96 +25,112 @@ class HeadActivity : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
     lateinit var db: FirebaseFirestore
     lateinit var value: String
-    lateinit var fab1: FloatingActionButton
-    lateinit var workType: String
-    lateinit var appBar: BottomAppBar
+    lateinit var fab: FloatingActionButton
+    var workType: String = ""
+   // lateinit var appBar: BottomAppBar
+    lateinit var accountItem: View
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_head)
 
+         try {
+            this.supportActionBar!!.hide()
+        } catch (e: NullPointerException) {
+        }
+
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         recycleView = findViewById<RecyclerView>(id.recyclerView)
         recycleView.layoutManager = LinearLayoutManager(this)
+        //
+        //
         recycleView.adapter = WorkRecycleAdapter(this, DataManger.work)
-        appBar = findViewById<BottomAppBar>(id.bottomAppBars)
-        fab1 = findViewById<View>(id.floatingActionButton2) as FloatingActionButton
+        //
+        //
+
+        fab = findViewById<FloatingActionButton>(id.floatingActionButton)
+        val workItem = findViewById<View>(id.bussniesItem)
+        val messageItem = findViewById<View>(id.messageItem)
+        accountItem = findViewById<BottomAppBar>(id.accountItem)
+        val alert = AlertDialog.Builder(this)
+        val signOutItem = findViewById<View>(id.sign_Out_Item)
+
         val user = auth.currentUser
         val docRef = db.collection("Users").document(user!!.uid)
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    workType = document.data?.get("workType").toString()
-                    }
-                }
+        docRef.get().addOnSuccessListener{ document ->
+            if (document != null) {
+                workType = document.data?.get("workType").toString()
+                println("!!! : $workType")
+                typOfUser()
 
-            fab1.setOnClickListener { view ->
-                intent = Intent(this, WorkAnnouncementActivity::class.java)
+            }
+        }
+
+        accountItem.setOnClickListener {
+            intent = Intent(this, ProfilActivity::class.java)
+            startActivity(intent)
+        }
+       fab.setOnClickListener {
+            intent = Intent(this, WorkAnnouncementActivity::class.java)
+           startActivity(intent)
+        }
+        messageItem.setOnClickListener {
+            println("!!! : message clickt")
+        }
+        workItem.setOnClickListener {
+            intent = Intent(this, HeadActivity::class.java)
+            startActivity(intent)
+        }
+        signOutItem.setOnClickListener {
+            println("!!! : signout pressd")
+            alert.setTitle("Är du säker?")
+            alert.setMessage("Vill du logga ut?")
+            alert.setPositiveButton("Ja") { dialogInterface: DialogInterface, i: Int ->
+                auth.signOut()
+                intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
+            alert.setNegativeButton("Nej") { dialogInterface: DialogInterface, i: Int -> }
+            alert.show()
+        }
+
     }
 
-        fun typOfUser() {
-            println("QQQ : W")
-            if (workType.equals("worker")){
-                fab1.hide()
-                val messageItem = findViewById<View>(id.messageItem)
-                messageItem.setOnClickListener {
-                }
-                val bussinesItem = findViewById<View>(id.bussniesItem)
-                bussinesItem.setOnClickListener {
-                    intent = Intent(this, HeadActivity::class.java)
-                    startActivity(intent)
-                }
-                val accountItem = findViewById<View>(id.accountItem)
-                accountItem.setOnClickListener {
-                    intent = Intent(this, ProfilActivity::class.java)
-                    startActivity(intent)
-                }
-                val locationItem = findViewById<View>(id.locationItem)
-                locationItem.setOnClickListener {
-                }
 
-            }
-            if (workType.equals("employer")){
-                appBar.getMenu()
-                    .findItem(R.id.locationItem)
-                    .setVisible(false)
-                appBar.invalidate()
-                appBar.getMenu()
-                    .findItem(R.id.accountItem)
-                    .setVisible(false)
-                appBar.invalidate()
-                val messageItem = findViewById<View>(id.messageItem)
-                messageItem.setOnClickListener {
-                    // meddelade intnet sida
-                }
-                val bussinesItem = findViewById<View>(id.bussniesItem)
-                bussinesItem.setOnClickListener {
-                    intent = Intent(this, HeadActivity::class.java)
-                    startActivity(intent)
-                }
-                val accountItem = findViewById<View>(id.accountItem)
-                accountItem.setOnClickListener {
-                    // egen intent liten profil men mest föra tt radera jobb och vissa vad d har
-                }
-                val signOutItem = findViewById<View>(id.signOutItem)
-                signOutItem.setOnClickListener {
-                   // auth.signOut()
-                    intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                }
-            }
+   fun typOfUser() {
+        println("!!! : typeOfUser equals worker")
+        if (workType.equals("worker")){
+            //fab.hide()
+            accountItem.setOnClickListener {
+                intent = Intent(this, ProfilActivity::class.java)
+                startActivity(intent)
+            }*/
+        }
+        if (workType.equals("employer")){
+           bottomAppBars.getMenu()
+                .findItem(R.id.locationItem)
+                .setVisible(false)
+            bottomAppBars.invalidate()
+
+            bottomAppBars.getMenu()
+                .findItem(R.id.accountItem)
+                .setVisible(false)
+            bottomAppBars.invalidate()
 
         }
+        println("!!! : typeOfUser lämngs ner")
+        return
+    }
 
 
-        //overridar och säger till adapter att uopdatera ändringarna
-        override fun onResume() {
-            super.onResume()
-            recycleView.adapter?.notifyDataSetChanged()
-        }
+    //overridar och säger till adapter att uopdatera ändringarna
+    override fun onResume() {
+        super.onResume()
+        recycleView.adapter?.notifyDataSetChanged()
+    }
 
 }
+
+

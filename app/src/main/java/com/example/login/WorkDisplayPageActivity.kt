@@ -1,8 +1,13 @@
 package com.example.login
 
+import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -27,6 +32,36 @@ class WorkDisplayPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_work_display_page)
 
+        val workItem = findViewById<View>(R.id.bussniesItem)
+        val messageItem = findViewById<View>(R.id.messageItem)
+        val accountItem = findViewById<View>(R.id.accountItem)
+        val alert = AlertDialog.Builder(this)
+        val signOutItem = findViewById<View>(R.id.sign_Out_Item)
+
+        accountItem.setOnClickListener {
+            intent = Intent(this, ProfilActivity::class.java)
+            startActivity(intent)
+        }
+        messageItem.setOnClickListener {
+            println("!!! : message clickt")
+        }
+        workItem.setOnClickListener {
+            intent = Intent(this, HeadActivity::class.java)
+            startActivity(intent)
+        }
+        signOutItem.setOnClickListener {
+            println("!!! : signout pressd")
+            alert.setTitle("Är du säker?")
+            alert.setMessage("Vill du logga ut?")
+            alert.setPositiveButton("Ja") { dialogInterface: DialogInterface, i: Int ->
+                auth.signOut()
+                intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            alert.setNegativeButton("Nej") { dialogInterface: DialogInterface, i: Int -> }
+            alert.show()
+        }
+
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
@@ -41,6 +76,7 @@ class WorkDisplayPageActivity : AppCompatActivity() {
 
         val studentPosition = intent.getIntExtra(Work_POSETION_KEY, POSITION_NOT_SET)
         displayWork(studentPosition)
+        employerPhoneNumber.text = "0707".toString()
     }
 
     fun displayWork(position: Int){
@@ -50,59 +86,8 @@ class WorkDisplayPageActivity : AppCompatActivity() {
         workSalary.text = work.salary
         workLocation.text = work.workLocation
         employerName.text = work.employerName
-        employerPhoneNumber.text = work.employerPhoneNumber
+        employerPhoneNumber.text = work.employerPhoneNumber.toString()
         employerEmail.text = work.employerEmail
     }
-
-   /* fun displayWork2(studentPosition: Int) {
-
-        val shoppingItems = mutableListOf<Work>()
-
-        val user = auth.currentUser
-        val itemsRef = db.collection("work").document(user!!.uid)
-            .collection("workInfo")
-
-        itemsRef.addSnapshotListener { snapshot, e ->
-            if( snapshot != null ) {
-                shoppingItems.clear()
-                for(document in snapshot.documents) {
-                    val newItem = document.toObject(Work::class.java)
-                    if (newItem != null)
-                        shoppingItems.add(newItem)
-                }
-            }
-        }
-    }*/
-
-   /* fun set(){
-        val user = auth.currentUser ?: return
-        val workList = mutableListOf<Work>()
-        val workRef = db.collection("work").document(user.uid)
-
-        workRef.addSnapshotListener { snapshot, e ->
-            if (snapshot != null) {
-                workList.clear()
-                val newItem = snapshot.toObject(Work::class.java)
-                if (newItem != null) {
-                    workList.add(newItem)
-                    setProfilInfo(newItem)
-                }
-            }
-        }
-    }
-
-
-    fun setProfilInfo(newItem: Work) {
-        //val work = DataManger.workList[position]
-        workTitle.text = newItem.employerName
-        /*workDescription.text = work.description
-        workSalary.text = work.salary
-        workLocation.text = work.workLocation
-        employerName.text = work.employerName
-        employerPhoneNumber.text = work.employerPhoneNumber
-        employerEmail.text = work.employerEmail
-
-    }*/
-    */
 
 }

@@ -27,9 +27,11 @@
             <ImageView
                 android:id="@+id/profilPicture"
                 android:layout_width="match_parent"
-                android:layout_height="275dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:contentDescription="@string/profilPicture"
-                app:srcCompat="@drawable/dog" />
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_help_black_24dp" />
 
             <TextView
                 android:id="@+id/rubrik"
@@ -75,16 +77,6 @@
                 android:progressTint="#FFD700"
                 android:rating="3"
                 android:stepSize="0.5" />
-
-            <TextView
-                android:id="@+id/tasks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="18dp"
-                android:textColor="#000000"
-                android:textSize="20sp" />
 
             <View
                 android:id="@+id/lineView2"

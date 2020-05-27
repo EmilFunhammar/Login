@@ -5,13 +5,13 @@
     <item
         android:id="@+id/locationItem"
         android:icon="@drawable/ic_location_on"
-        android:title="Maps"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never"
+        android:title="Maps" />
     <item
         android:id="@+id/accountItem"
         android:icon="@drawable/ic_person"
         android:title="profil"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always|withText" />
 
 
     <item
@@ -24,11 +24,12 @@
         android:id="@+id/messageItem"
         android:icon="@drawable/ic_email"
         android:title="Meddelande"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/sign_Out_Item"
-        android:icon="@drawable/ic_power_settings_new_black_24dp"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"
         android:title="sign_out"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never"
+       />
 </menu>

@@ -1,11 +1,11 @@
 package com.example.login
 
-import DataManger
-import android.content.DialogInterface
+//import DataManger
+import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +16,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_head.*
-import kotlinx.android.synthetic.main.activity_profil.*
 
 
 class HeadActivity : AppCompatActivity() {
@@ -27,18 +26,19 @@ class HeadActivity : AppCompatActivity() {
     lateinit var value: String
     lateinit var fab: FloatingActionButton
     var workType: String = ""
-   // lateinit var appBar: BottomAppBar
+    lateinit var appBar: BottomAppBar
     lateinit var accountItem: View
+    //lateinit var workList: MutableList<Work>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_head)
 
-         try {
+        /*try {
             this.supportActionBar!!.hide()
         } catch (e: NullPointerException) {
-        }
+        }*/
 
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
@@ -46,23 +46,56 @@ class HeadActivity : AppCompatActivity() {
         recycleView.layoutManager = LinearLayoutManager(this)
         //
         //
-        recycleView.adapter = WorkRecycleAdapter(this, DataManger.work)
+        //recycleView.adapter = WorkRecycleAdapter(this, workList)
         //
         //
 
+
+            val user = auth.currentUser
+            /*val itemsRef = db.collection("work")
+
+            itemsRef.addSnapshotListener { snapshot, e ->
+                if (snapshot != null) {
+                    workList.clear()
+                    for (document in documents){
+                    val newItem = document.toObject(Work::class.java)
+                    if (newItem != null) {
+                        workList.add(newItem)
+
+                        }
+                        recycleView.adapter?.notifyDataSetChanged()
+                    }
+                }
+            }*/
+
+        // snapshotLisentet
+
+
+
+
+       /* David Svensson:balloon:  1:43 PM
+        db.collection("work").snapshotListener().on complet {
+            work.clear()
+            for (doc in documts) {
+                val a =doc.toObject(work::class.java)
+                work.add(a)
+            }
+            recycleView.adapter.notifyDactachanged()
+        }*/
         fab = findViewById<FloatingActionButton>(id.floatingActionButton)
         val workItem = findViewById<View>(id.bussniesItem)
         val messageItem = findViewById<View>(id.messageItem)
         accountItem = findViewById<BottomAppBar>(id.accountItem)
-        val alert = AlertDialog.Builder(this)
+        //val alert = AlertDialog.Builder(this)
         val signOutItem = findViewById<View>(id.sign_Out_Item)
 
-        val user = auth.currentUser
+//       signOutItem.invalidate()
+
+
         val docRef = db.collection("Users").document(user!!.uid)
         docRef.get().addOnSuccessListener{ document ->
             if (document != null) {
                 workType = document.data?.get("workType").toString()
-                println("!!! : $workType")
                 typOfUser()
 
             }
@@ -78,12 +111,14 @@ class HeadActivity : AppCompatActivity() {
         }
         messageItem.setOnClickListener {
             println("!!! : message clickt")
+            intent = Intent(this, EmployesApplicationActivity::class.java)
+            startActivity(intent)
         }
         workItem.setOnClickListener {
             intent = Intent(this, HeadActivity::class.java)
             startActivity(intent)
         }
-        signOutItem.setOnClickListener {
+        /*signOutItem.setOnClickListener {
             println("!!! : signout pressd")
             alert.setTitle("Är du säker?")
             alert.setMessage("Vill du logga ut?")
@@ -94,34 +129,30 @@ class HeadActivity : AppCompatActivity() {
             }
             alert.setNegativeButton("Nej") { dialogInterface: DialogInterface, i: Int -> }
             alert.show()
-        }
+        }*/
+
+
 
     }
 
 
    fun typOfUser() {
-        println("!!! : typeOfUser equals worker")
         if (workType.equals("worker")){
-            //fab.hide()
-            accountItem.setOnClickListener {
-                intent = Intent(this, ProfilActivity::class.java)
-                startActivity(intent)
-            }*/
+            fab.hide()
         }
         if (workType.equals("employer")){
+           /* println("!!! : employer")
            bottomAppBars.getMenu()
-                .findItem(R.id.locationItem)
+                .findItem(id.locationItem)
                 .setVisible(false)
             bottomAppBars.invalidate()
-
             bottomAppBars.getMenu()
-                .findItem(R.id.accountItem)
+                .findItem(id.accountItem)
                 .setVisible(false)
-            bottomAppBars.invalidate()
+            bottomAppBars.invalidate()*/
 
         }
-        println("!!! : typeOfUser lämngs ner")
-        return
+        //return
     }
 
 

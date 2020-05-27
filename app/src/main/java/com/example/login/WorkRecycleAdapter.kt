@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class WorkRecycleAdapter(private val context: Context, private val workList: MutableList<Work>) :
+class WorkRecycleAdapter(
+    private val context: Context, private val workList: MutableList<Work>) :
     RecyclerView.Adapter<WorkRecycleAdapter.ViewHolder>() {
 
     private val layoutInflater = LayoutInflater.from(context)
@@ -16,7 +17,6 @@ class WorkRecycleAdapter(private val context: Context, private val workList: Mut
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
          val itemView = layoutInflater.inflate(R.layout.head_listitem, parent, false)
         return ViewHolder(itemView)
-
     }
 
     override fun getItemCount(): Int {
@@ -25,7 +25,7 @@ class WorkRecycleAdapter(private val context: Context, private val workList: Mut
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.textViewTitle.text = workList[position].title
-        holder.textViewSalary.text = workList[position].salary
+        holder.textViewSalary.text = workList[position].salary.toString()
         holder.textViewDecription.text = workList[position].description
     }
 
@@ -43,9 +43,6 @@ class WorkRecycleAdapter(private val context: Context, private val workList: Mut
             }
         }
     }
-
-
-
 
     }
 

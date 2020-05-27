@@ -76,11 +76,10 @@ class WorkDisplayPageActivity : AppCompatActivity() {
 
         val studentPosition = intent.getIntExtra(Work_POSETION_KEY, POSITION_NOT_SET)
         displayWork(studentPosition)
-        employerPhoneNumber.text = "0707".toString()
     }
 
     fun displayWork(position: Int){
-        val work =  DataManger.work[position]
+        val work =  workList[position]
         workTitle.text = work.title
         workDescription.text = work.description
         workSalary.text = work.salary

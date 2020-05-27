@@ -1,6 +1,6 @@
 package com.example.login
 
-class Work
+ class Work
     ( var title: String? = null,
     var salary: String? = null,
     var description: String? = null,

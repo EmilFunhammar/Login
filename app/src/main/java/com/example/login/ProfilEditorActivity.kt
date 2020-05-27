@@ -1,28 +1,27 @@
 package com.example.login
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-
-import androidx.core.text.set
-import androidx.fragment.app.FragmentActivity
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_profil_editor.*
-import kotlinx.android.synthetic.main.activity_sign_up_layout.*
-
 
 class ProfilEditorActivity : AppCompatActivity() {
+
+
 
 
     lateinit var profilPicture: ImageView
@@ -38,11 +37,22 @@ class ProfilEditorActivity : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     lateinit var auth: FirebaseAuth
     lateinit var workType : String
+    var selectedPhotoUri : Uri? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profil_editor)
+
+        supportActionBar?.title = ""
+
+      /*  try {
+            this.supportActionBar!!.hide()
+        } catch (e: NullPointerException) {
+        }
+
+       */
+
 
         val workItem = findViewById<View>(R.id.bussniesItem)
         val messageItem = findViewById<View>(R.id.messageItem)
@@ -50,7 +60,8 @@ class ProfilEditorActivity : AppCompatActivity() {
         val alert = AlertDialog.Builder(this)
         val signOutItem = findViewById<View>(R.id.sign_Out_Item)
 
-        accountItem.setOnClickListener {
+
+       /* accountItem.setOnClickListener {
             intent = Intent(this, ProfilActivity::class.java)
             startActivity(intent)
         }
@@ -72,14 +83,13 @@ class ProfilEditorActivity : AppCompatActivity() {
             }
             alert.setNegativeButton("Nej") { dialogInterface: DialogInterface, i: Int -> }
             alert.show()
-        }
+        }*/
 
 
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
 
-        profilPicture = findViewById<ImageView>(R.id.imageView)
         editprofilName = findViewById<EditText>(R.id.editProfilName)
         editLanguage1 = findViewById<EditText>(R.id.lang_Edit_Text1)
         editLanguage2 = findViewById<EditText>(R.id.lang_Edit_Text2)
@@ -93,6 +103,7 @@ class ProfilEditorActivity : AppCompatActivity() {
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
+                    //selectedPhotoUri = document.data?.get("userImageUri") as Uri?
                     workType = document.data!!["workType"].toString()
                     editprofilName.text = Editable.Factory.getInstance()
                         .newEditable(document.data!!["profilName"].toString())
@@ -116,199 +127,79 @@ class ProfilEditorActivity : AppCompatActivity() {
             }
 
 
-                val saveButton = findViewById<Button>(R.id.save_ButtonEdit)
-                saveButton.setOnClickListener {
-                    //editInputInfo()
-                    test()
-                    //saveProfilInformation()
-                    intent = Intent(this, ProfilActivity::class.java)
-                    startActivity(intent)
-                }
+      val saveButton = findViewById<Button>(R.id.save_ButtonEdit)
+        saveButton.setOnClickListener {
+            uploadeImageToFirebaseStorage()
+           // uploadeUserToFirebaseDatabase()
+            intent = Intent(this, ProfilActivity::class.java)
+            startActivity(intent)
+        }
 
-
-
-
-
-
-
-
-
-
+        selectphoto_Image.setOnClickListener {
+            println("!!! : PHOTO")
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, 0)
+        }
 
     } // OnCreate
 
+   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
+            println("!!! : photo was selected")
 
-        /*fun test1(){
-        var user = auth.currentUser ?: return
-        val docRef = db.collection("Users").document(user.uid)
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
+            selectedPhotoUri = data.data
 
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
+            //val bitmap = uri?.let { ImageDecoder.createSource(contentResolver, it) }
 
-                    Log.d("AAA", "DocumentSnapshot data: firebase ${document.data!!["profilName"]}")
-                    Log.d("AAA", "DocumentSnapshot data: editText ${editprofilName.text}")
-
-
-
-                    if (editprofilName.text.toString() == "") {
-                        println("AAA : tom")
-                        editprofilName.text = Editable.Factory.getInstance().newEditable(document.data!!["profilName"].toString())
-                        println("AAA :!nytt värde för editText ${editprofilName.text}")
-
-                        //println("AAA :nytt värde för editText ${editprofilName.text}")
-                        //test()
-                    } else {
-                        println("AAA : inte lika")
-                        test()
-                    }
-
-
-
-
-                }
-
-            }
-
-    }*/
-
-        fun editInputInfo() {
-            var user = auth.currentUser ?: return
-            val docRef = db.collection("Users").document(user.uid)
-            docRef.get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-
-                    }
-                }
+            val bitmapDrawable = BitmapDrawable(bitmap)
+            // selectphoto_Image.setBackgroundDrawable(bitmapDrawable)
+            selectphoto_Image.setImageBitmap(bitmap)
         }
 
-                      /*  if (editprofilName.text.toString() == "") {
-                            editprofilName.text = Editable.Factory.getInstance()
-                                .newEditable(document.data!!["profilName"].toString())
-                            println("AAA :!nytt värde för editText ${editprofilName.text}")
-                        }
-                        if (editLanguage1.text.toString() == "") {
-                            editLanguage1.text = Editable.Factory.getInstance()
-                                .newEditable(document.data!!["editLanguage1"].toString())
-                            println("AAA :!nytt värde för editText ${editLanguage1.text}")
-                        }
-                        if (editLanguage2.text.toString() == "") {
-                            editLanguage2.text = Editable.Factory.getInstance()
-                                .newEditable(document.data!!["editLanguage2"].toString())
-                            println("AAA :!nytt värde för editText ${editLanguage2.text}")
-                        }
-                        if (editLanguage3.text.toString() == "") {
-                            editLanguage3.text = Editable.Factory.getInstance()
-                                .newEditable(document.data!!["editLanguage3"].toString())
-                            println("AAA :!nytt värde för editText ${editLanguage3.text}")
-                        }
-                        if (profilDescription.text.toString() == "") {
-                            profilDescription.text = Editable.Factory.getInstance()
-                                .newEditable(document.data!!["profilDescription"].toString())
-                            println("AAA :!nytt värde för editText ${profilDescription.text}")
-                        }
-                        if (profilOtherInfo1.text.toString() == "") {
-                            profilOtherInfo1.text = Editable.Factory.getInstance()
-                                .newEditable(document.data!!["profilOtherInfo1"].toString())
-                            println("AAA :!nytt värde för editText ${profilOtherInfo1.text}")
-                        }
-                        if (profilOtherInfo2.text.toString() == "") {
-                            profilOtherInfo2.text = Editable.Factory.getInstance()
-                                .newEditable(document.data!!["profilOtherInfo2"].toString())
-                            println("AAA :!nytt värde för editText ${profilOtherInfo2.text}")
-                        }
-                        if (profilOtherInfo3.text.toString() == "") {
-                            profilOtherInfo3.text = Editable.Factory.getInstance()
-                                .newEditable(document.data!!["profilOtherInfo3"].toString())
-                            println("AAA :!nytt värde för editText ${profilOtherInfo3.text}")
-                        }
-                        if (profilOtherInfo4.text.toString() == "") {
-                            profilOtherInfo4.text = Editable.Factory.getInstance()
-                                .newEditable(document.data!!["profilOtherInfo4"].toString())
-                            println("AAA :!nytt värde för editText ${profilOtherInfo4.text}")
-                        } else {
-                            test()
-                        }
-                    }
-                    test()
-                }
-        }*/
+    }
 
-        private fun saveProfilInformation() {
+    fun uploadeImageToFirebaseStorage(){
+        if (selectedPhotoUri == null) return
 
+        val fileName = auth.currentUser
+        val ref = FirebaseStorage.getInstance()
+            .getReference("userImages").child(fileName?.uid!!)
 
-            var user = auth.currentUser ?: return
-            val shoppingItems = mutableListOf<Profil>()
-            val itemsRef = db.collection("Users").document(user.uid)
+        ref.putFile(selectedPhotoUri!!)
+            .addOnSuccessListener {
+                println("!!! : sucsses ${it.metadata?.path}")
 
-            itemsRef.addSnapshotListener { snapshot, e ->
-                if (snapshot != null) {
-                    shoppingItems.clear()
-                    val newItem = snapshot.toObject(Profil::class.java)
-                    if (newItem != null) {
-                        shoppingItems.add(newItem)
-                        println("AAA : ${editprofilName.text}")
-                        println("AAA : ${newItem.profilName}")
-                        //if (newItem.profilName!! == editprofilName.text.toString()) {
-                        if (editprofilName.text.toString() == "") {
-                            println("AAA : tom")
-                            editprofilName.setText(newItem.profilName)
-                            println("AAA : ${editprofilName.text}")
-                            test()
-                        } else {
-                            println("AAA : inte lika")
-                            test()
-                        }
-                    }
+                ref.downloadUrl.addOnSuccessListener {
+                    it.toString()
+                    println("!!! : File location $it")
+                    saveUserToFirebaseDatabase(it.toString())
                 }
             }
+    }
+    fun saveUserToFirebaseDatabase(selectedPhotoUri: String) {
+        println("!!! : user skapas")
+        val user = auth.currentUser ?: return
+        val profilInformation = Profil(
+            selectedPhotoUri,
+            editprofilName.text.toString(),
+            editLanguage1.text.toString(),
+            editLanguage2.text.toString(),
+            editLanguage3.text.toString(),
+            profilOtherInfo1.text.toString(),
+            profilOtherInfo2.text.toString(),
+            profilOtherInfo3.text.toString(),
+            profilOtherInfo4.text.toString(),
+            profilDescription.text.toString(),
+            workType = workType
+        )
 
-            /*  db.collection("Users").document(auth.currentUser!!.uid)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
+        db.collection("Users").document(user.uid).set(profilInformation)
+    }
 
-                    if (editprofilName.text.isEmpty()){
-                        println("AAA : ${editprofilName.setText()")
-                    }
-                } else {
-                }
-            }*/
-            // if (msg.trim().isEmpty()) {
-            //    Toast.makeText(applicationContext, "Message : " + msg, Toast.LENGTH_SHORT).show()
-            //  return
-            //}
-        }
-
-        fun test() {
-            val profilInformation = Profil(
-                //profilPicture,
-                editprofilName.text.toString(),
-                editLanguage1.text.toString(),
-                editLanguage2.text.toString(),
-                editLanguage3.text.toString(),
-                profilOtherInfo1.text.toString(),
-                profilOtherInfo2.text.toString(),
-                profilOtherInfo3.text.toString(),
-                profilOtherInfo4.text.toString(),
-                profilDescription.text.toString(),
-                workType = workType
-
-            )
-
-
-            val user = auth.currentUser ?: return
-
-            db.collection("Users").document(user.uid).set(profilInformation)
-                .addOnSuccessListener { println("!!!: complete") }
-                .addOnCanceledListener { println("!!!: cancel") }
-                .addOnSuccessListener { println("!!!: write") }
-                .addOnFailureListener { println("!!!: did not write") }
-
-        }
-
-        fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
 
 

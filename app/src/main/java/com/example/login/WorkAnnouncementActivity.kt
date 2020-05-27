@@ -24,7 +24,7 @@ class WorkAnnouncementActivity : AppCompatActivity() {
     lateinit var emailAdressText : EditText
     lateinit var db : FirebaseFirestore
     lateinit var auth: FirebaseAuth
-    //lateinit var workList : MutableList<Work>
+    lateinit var workList : MutableList<Work>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,9 +96,10 @@ class WorkAnnouncementActivity : AppCompatActivity() {
             if (user == null)
                 return
 
+            //db.collection("work").document(user!!.uid).add(workInfrormation)
             db.collection("work").document(user!!.uid).collection("workInfo").add(workInfrormation)
                 .addOnSuccessListener {
-                    DataManger.work.add(workInfrormation)
+                    workList.add(workInfrormation)
                 }
                 .addOnCanceledListener { }
                 .addOnSuccessListener {}

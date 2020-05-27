@@ -9,9 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EmployesApplicationActivity"></activity>
+        <activity android:name=".DisplayApplicationProfil"></activity>
+        <activity android:name=".EmployesApplicationActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ProfilActivity">
+            </meta-data>
+        </activity>
         <activity android:name=".WorkDisplayPageActivity" />
-        <activity android:name=".ProfilEditorActivity" />
+        <activity android:name=".ProfilEditorActivity" >
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ProfilActivity">
+            </meta-data>
+        </activity>
         <activity android:name=".WorkAnnouncementActivity" />
         <activity android:name=".HeadActivity" />
         <activity android:name=".ProfilActivity" />

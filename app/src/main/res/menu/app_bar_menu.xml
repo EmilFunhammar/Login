@@ -5,31 +5,25 @@
     <item
         android:id="@+id/locationItem"
         android:icon="@drawable/ic_location_on"
-        app:showAsAction="never"
-        android:title="Maps" />
+        android:title="Maps"
+        android:orderInCategory="4"/>
     <item
         android:id="@+id/accountItem"
         android:icon="@drawable/ic_person"
-        android:title="profil"
-        app:showAsAction="always|withText" />
-
+        android:title="profil" />
 
     <item
         android:id="@+id/bussniesItem"
         android:icon="@drawable/ic_business_center"
-        android:title="Affärer"
-        app:showAsAction="ifRoom" />
+        android:title="Affärer"/>
 
     <item
         android:id="@+id/messageItem"
         android:icon="@drawable/ic_email"
-        android:title="Meddelande"
-        app:showAsAction="ifRoom"/>
+        android:title="Meddelande"/>
 
     <item
         android:id="@+id/sign_Out_Item"
         android:icon="@drawable/ic_exit_to_app_black_24dp"
-        android:title="sign_out"
-        app:showAsAction="never"
-       />
+        android:title="sign_out"/>
 </menu>

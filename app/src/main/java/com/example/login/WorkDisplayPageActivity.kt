@@ -1,24 +1,18 @@
 package com.example.login
 
-import android.content.DialogInterface
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import com.google.android.material.bottomappbar.BottomAppBar
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-const val POSITION_NOT_SET = -1
-const val Work_POSETION_KEY = "WORK"
-
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class WorkDisplayPageActivity : AppCompatActivity() {
 
     lateinit var db : FirebaseFirestore
     lateinit var auth: FirebaseAuth
-
     lateinit var workTitle : TextView
     lateinit var workDescription : TextView
     lateinit var workSalary : TextView
@@ -26,45 +20,35 @@ class WorkDisplayPageActivity : AppCompatActivity() {
     lateinit var employerName : TextView
     lateinit var employerPhoneNumber : TextView
     lateinit var employerEmail : TextView
-    lateinit var workList : MutableList<Work>
+    lateinit var applayButton: Button
+    var workType: String = ""
+    //val value = intent.getParcelableExtra<Work>("WORK_KEY")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_work_display_page)
 
-        val workItem = findViewById<View>(R.id.bussniesItem)
-        val messageItem = findViewById<View>(R.id.messageItem)
-        val accountItem = findViewById<View>(R.id.accountItem)
-        val alert = AlertDialog.Builder(this)
-        val signOutItem = findViewById<View>(R.id.sign_Out_Item)
-
-        accountItem.setOnClickListener {
-            intent = Intent(this, ProfilActivity::class.java)
-            startActivity(intent)
-        }
-        messageItem.setOnClickListener {
-            println("!!! : message clickt")
-        }
-        workItem.setOnClickListener {
-            intent = Intent(this, HeadActivity::class.java)
-            startActivity(intent)
-        }
-        signOutItem.setOnClickListener {
-            println("!!! : signout pressd")
-            alert.setTitle("Är du säker?")
-            alert.setMessage("Vill du logga ut?")
-            alert.setPositiveButton("Ja") { dialogInterface: DialogInterface, i: Int ->
-                auth.signOut()
-                intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
-            alert.setNegativeButton("Nej") { dialogInterface: DialogInterface, i: Int -> }
-            alert.show()
-        }
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+
         val user = auth.currentUser
+        db.collection("Users").document(user!!.uid).get().addOnSuccessListener { document ->
+            if (document != null) {
+                workType = document.data?.get("workType").toString()
+                println("!!! : $workType")
+                typOfUser()
+            }
+        }
+
+        supportActionBar?.title = ""
+
+
+
+        applayButton = findViewById<Button>(R.id.applay_Work)
+        applayButton.setOnClickListener {
+            downloadUserInformation()
+        }
+
 
         employerName = findViewById<TextView>(R.id.displayEmployerName)
         employerPhoneNumber = findViewById<TextView>(R.id.displayPhoneNumber)
@@ -74,19 +58,66 @@ class WorkDisplayPageActivity : AppCompatActivity() {
         workDescription = findViewById<TextView>(R.id.displayDiscriptionText)
         workSalary = findViewById<TextView>(R.id.displaySalaryText)
 
-        val studentPosition = intent.getIntExtra(Work_POSETION_KEY, POSITION_NOT_SET)
-        displayWork(studentPosition)
+        val value = intent.getParcelableExtra<Work>("WORK_KEY")
+        if (value != null) {
+            println("!!! : ${value.title}")
+            employerName.text = value.employerName
+            employerPhoneNumber.text = value.employerPhoneNumber
+            employerEmail.text = value.employerEmail
+            workLocation.text = value.workLocation
+            workTitle.text = value.title
+            workDescription.text = value.description
+            workSalary.text = value.salary
+        }
     }
 
-    fun displayWork(position: Int){
-        val work =  workList[position]
-        workTitle.text = work.title
-        workDescription.text = work.description
-        workSalary.text = work.salary
-        workLocation.text = work.workLocation
-        employerName.text = work.employerName
-        employerPhoneNumber.text = work.employerPhoneNumber.toString()
-        employerEmail.text = work.employerEmail
+    private fun typOfUser() {
+        if (workType == "worker"){
+
+        }
+        if(workType == "employer"){
+            applayButton.visibility = View.GONE
+        }
+
+    }
+
+    private fun downloadUserInformation() {
+        val user = auth.currentUser ?: return
+        val shoppingItems = mutableListOf<Profil>()
+        val itemsRef = db.collection("Users").document(user.uid)
+
+        itemsRef.addSnapshotListener { snapshot, e ->
+            if (snapshot != null) {
+                shoppingItems.clear()
+                val newItem = snapshot.toObject(Profil::class.java)
+                if (newItem != null) {
+                    sendApplayRequset(newItem)
+
+                }
+            }
+        }
+    }
+
+    private fun sendApplayRequset(newitem: Profil){
+    val value = intent.getParcelableExtra<Work>("WORK_KEY")
+        val profilInformation = Profil(
+            newitem.userImageUri,
+            newitem.profilName,
+            newitem.editLanguage1,
+            newitem.editLanguage2,
+            newitem.editLanguage3,
+            newitem.profilOtherInfo1,
+            newitem.profilOtherInfo2,
+            newitem.profilOtherInfo3,
+            newitem.profilOtherInfo4,
+            newitem.profilDescription,
+            newitem.workType
+        )
+
+        db.collection("applications").document(value.userUid!!)
+            .collection("users").add(profilInformation).addOnCompleteListener {
+                finish()
+            }
     }
 
 }

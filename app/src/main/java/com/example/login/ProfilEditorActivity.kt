@@ -46,46 +46,6 @@ class ProfilEditorActivity : AppCompatActivity() {
 
         supportActionBar?.title = ""
 
-      /*  try {
-            this.supportActionBar!!.hide()
-        } catch (e: NullPointerException) {
-        }
-
-       */
-
-
-        val workItem = findViewById<View>(R.id.bussniesItem)
-        val messageItem = findViewById<View>(R.id.messageItem)
-        val accountItem = findViewById<View>(R.id.accountItem)
-        val alert = AlertDialog.Builder(this)
-        val signOutItem = findViewById<View>(R.id.sign_Out_Item)
-
-
-       /* accountItem.setOnClickListener {
-            intent = Intent(this, ProfilActivity::class.java)
-            startActivity(intent)
-        }
-        messageItem.setOnClickListener {
-            println("!!! : message clickt")
-        }
-        workItem.setOnClickListener {
-            intent = Intent(this, HeadActivity::class.java)
-            startActivity(intent)
-        }
-        signOutItem.setOnClickListener {
-            println("!!! : signout pressd")
-            alert.setTitle("Är du säker?")
-            alert.setMessage("Vill du logga ut?")
-            alert.setPositiveButton("Ja") { dialogInterface: DialogInterface, i: Int ->
-                auth.signOut()
-                intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
-            alert.setNegativeButton("Nej") { dialogInterface: DialogInterface, i: Int -> }
-            alert.show()
-        }*/
-
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser

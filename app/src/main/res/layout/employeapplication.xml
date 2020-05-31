@@ -10,16 +10,18 @@
         android:id="@+id/Card_View"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#9E1E1E"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="8dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        app:cardBackgroundColor="#000000"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="1dp"
         app:cardUseCompatPadding="true"
-        app:contentPadding="10dp">
+        app:contentPadding="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#928B8B">
+            android:background="@color/notUserWorkColor">
 
             <TextView
                 android:id="@+id/card_View_Name"
@@ -31,6 +33,7 @@
                 android:layout_marginBottom="10dp"
                 android:maxLines="2"
                 android:text="TextView"
+                android:textColor="#040303"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/delete_Button"
                 app:layout_constraintStart_toStartOf="parent"

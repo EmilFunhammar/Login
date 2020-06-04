@@ -1,25 +1,19 @@
 package com.example.login
 
 
-import android.content.ClipDescription
 import android.content.DialogInterface
 import android.content.Intent
-import android.icu.text.Transliterator
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profil.*
-import java.text.ParsePosition
 
 
 class ProfilActivity : AppCompatActivity() {
@@ -39,7 +33,7 @@ class ProfilActivity : AppCompatActivity() {
     lateinit var generalInfoText3: TextView
     lateinit var generalInfoText4: TextView
     lateinit var description: TextView
-    var workType: String = "employer"
+    var workType: String = ""
     lateinit var persons: List<Profil>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,17 +63,33 @@ class ProfilActivity : AppCompatActivity() {
         generalInfoText4 = findViewById(R.id.generall4)
         description = findViewById(R.id.bioText)
 
-        typOfUser()
         val user = auth.currentUser
-      /*  db.collection("Users").document(user!!.uid).get().addOnSuccessListener { document ->
+        db.collection("Users").document(user!!.uid).get().addOnSuccessListener { document ->
             if (document != null) {
                 workType = document.data?.get("workType").toString()
                 println("!!! : $workType")
                 typOfUser()
 
             }
-        }*/
+        }
 
+        val docRef = db.collection("Users").document(user!!.uid)
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val newItem = document.toObject(Profil::class.java)
+                    println("!!!: emild ${newItem}")
+                    if (newItem != null) {
+                        setProfilInfo(newItem)
+                    }
+                }
+            }
+
+        val mapsItem = findViewById<View>(R.id.locationItem)
+        mapsItem.setOnClickListener {
+            intent = Intent(this, MapsActivity::class.java)
+            startActivity(intent)
+        }
         val accountItem = findViewById<View>(R.id.accountItem)
         accountItem.setOnClickListener {
             intent = Intent(this, ProfilActivity::class.java)
@@ -98,6 +108,7 @@ class ProfilActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // loggar ut
         val alert = AlertDialog.Builder(this)
         val signOutItem = findViewById<View>(R.id.sign_Out_Item)
         signOutItem.setOnClickListener {
@@ -115,56 +126,32 @@ class ProfilActivity : AppCompatActivity() {
 
         val fab = findViewById<View>(R.id.floatingActionButtonProfilPage)
         fab.setOnClickListener {
-                intent = Intent(this, ProfilEditorActivity::class.java)
-                startActivity(intent)
-        }
-
-        snapshotListiner()
-    }
-
-
-
-
-    fun snapshotListiner() {
-        val user = auth.currentUser
-        val shoppingItems = mutableListOf<Profil>()
-        val itemsRef = db.collection("Users").document(user?.uid!!)
-
-        itemsRef.addSnapshotListener { snapshot, e ->
-            if (snapshot != null) {
-                shoppingItems.clear()
-                val newItem = snapshot.toObject(Profil::class.java)
-                if (newItem != null) {
-                        shoppingItems.add(newItem)
-                        setProfilInfo(newItem)
-                }
-            }
+            intent = Intent(this, ProfilEditorActivity::class.java)
+            startActivity(intent)
         }
     }
 
-
-    fun setProfilInfo(newItem: Profil) {
-        if (Picasso.get().load(newItem.userImageUri) != null) {
-            println("!!!  displayApplication else: ${newItem.userImageUri}")
-            Picasso.get().load(newItem.userImageUri).into(profilPicture)
+    //ger Textview text
+    private fun setProfilInfo(it: Profil) {
+        if (Picasso.get().load(it.userImageUri) != null) {
+            Picasso.get().load(it.userImageUri).into(profilPicture)
         }
-        profilTitleText.text = newItem.profilName
+        profilTitleText.text = it.profilName
         ratingBar.numStars = 4
-        langText1.text = newItem.editLanguage1
-        langText2.text = newItem.editLanguage2
-        langText3.text = newItem.editLanguage3
-        aboutMe.text = "Om " + newItem.profilName
-        generalInfoText1.text = newItem.profilOtherInfo1
-        generalInfoText2.text = newItem.profilOtherInfo2
-        generalInfoText3.text = newItem.profilOtherInfo3
-        generalInfoText4.text = newItem.profilOtherInfo4
-        description.text = newItem.profilDescription
-        displayPreofilPage()
+        langText1.text = it.editLanguage1
+        langText2.text = it.editLanguage2
+        langText3.text = it.editLanguage3
+        aboutMe.text = "Om " + it.profilName
+        generalInfoText1.text = it.profilOtherInfo1
+        generalInfoText2.text = it.profilOtherInfo2
+        generalInfoText3.text = it.profilOtherInfo3
+        generalInfoText4.text = it.profilOtherInfo4
+        description.text = it.profilDescription
+        // gömmer de som inte fylls i
+        displayProfilPage()
     }
 
-
-
-    fun displayPreofilPage() {
+    private fun displayProfilPage() {
         ratingBar.rating = 5F
         if (langText1.text == "") {
             lang1.visibility = View.GONE
@@ -188,37 +175,22 @@ class ProfilActivity : AppCompatActivity() {
             generall4.visibility = View.GONE
         }
     }
-    fun typOfUser() {
+
+    private fun typOfUser() {
         println("!!! : $workType")
         if (workType.equals("worker")){
-            val signOutItem = findViewById<View>(R.id.sign_Out_Item)
             val messageItem = findViewById<View>(R.id.messageItem)
+            val mapsItem = findViewById<View>(R.id.locationItem)
             messageItem.visibility = View.GONE
-            signOutItem.visibility = View.GONE
+            mapsItem.visibility = View.INVISIBLE
         }
+
         if (workType.equals("employer")){
             println("!!! : $workType")
-            val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
-            val alert = AlertDialog.Builder(this)
-            val signOutItem = findViewById<View>(R.id.sign_Out_Item)
             val mapsItem = findViewById<View>(R.id.locationItem)
             val accountItem = findViewById<View>(R.id.accountItem)
             mapsItem.visibility = View.INVISIBLE
             accountItem.visibility = View.GONE
-            signOutItem.setOnClickListener {
-                println("!!! : signout pressd")
-                alert.setTitle("Är du säker?")
-                alert.setMessage("Vill du logga ut?")
-                alert.setPositiveButton("Ja") { dialogInterface: DialogInterface, i: Int ->
-                    auth.signOut()
-                    intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                }
-                alert.setNegativeButton("Nej") { dialogInterface: DialogInterface, i: Int -> }
-                alert.show()
-            }
-
-
         }
     }
 }

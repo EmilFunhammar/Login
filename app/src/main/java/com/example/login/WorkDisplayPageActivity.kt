@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,7 +36,6 @@ class WorkDisplayPageActivity : AppCompatActivity() {
         db.collection("Users").document(user!!.uid).get().addOnSuccessListener { document ->
             if (document != null) {
                 workType = document.data?.get("workType").toString()
-                println("!!! : $workType")
                 typOfUser()
             }
         }
@@ -60,14 +60,13 @@ class WorkDisplayPageActivity : AppCompatActivity() {
 
         val value = intent.getParcelableExtra<Work>("WORK_KEY")
         if (value != null) {
-            println("!!! : ${value.title}")
             employerName.text = value.employerName
             employerPhoneNumber.text = value.employerPhoneNumber
             employerEmail.text = value.employerEmail
             workLocation.text = value.workLocation
             workTitle.text = value.title
             workDescription.text = value.description
-            workSalary.text = value.salary
+            workSalary.text = value.salary + " Kronor"
         }
     }
 
@@ -76,7 +75,7 @@ class WorkDisplayPageActivity : AppCompatActivity() {
 
         }
         if(workType == "employer"){
-            applayButton.visibility = View.GONE
+            applayButton.visibility = View.INVISIBLE
         }
 
     }
@@ -91,15 +90,15 @@ class WorkDisplayPageActivity : AppCompatActivity() {
                 shoppingItems.clear()
                 val newItem = snapshot.toObject(Profil::class.java)
                 if (newItem != null) {
-                    sendApplayRequset(newItem)
+                    sendApplayRequest(newItem)
 
                 }
             }
         }
     }
 
-    private fun sendApplayRequset(newitem: Profil){
-    val value = intent.getParcelableExtra<Work>("WORK_KEY")
+    private fun sendApplayRequest(newitem: Profil){
+        val value = intent.getParcelableExtra<Work>("WORK_KEY")
         val profilInformation = Profil(
             newitem.userImageUri,
             newitem.profilName,
@@ -116,8 +115,10 @@ class WorkDisplayPageActivity : AppCompatActivity() {
 
         db.collection("applications").document(value.userUid!!)
             .collection("users").add(profilInformation).addOnCompleteListener {
+
+                Toast.makeText(baseContext, "Ansökan skickad",
+                    Toast.LENGTH_LONG).show()
                 finish()
             }
     }
-
 }

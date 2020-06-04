@@ -1,18 +1,14 @@
 package com.example.login
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -49,7 +45,7 @@ class ProfilEditorActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
-
+        profilPicture = findViewById<ImageView>(R.id.selectphoto_Image)
         editprofilName = findViewById<EditText>(R.id.editProfilName)
         editLanguage1 = findViewById<EditText>(R.id.lang_Edit_Text1)
         editLanguage2 = findViewById<EditText>(R.id.lang_Edit_Text2)
@@ -63,7 +59,6 @@ class ProfilEditorActivity : AppCompatActivity() {
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    //selectedPhotoUri = document.data?.get("userImageUri") as Uri?
                     workType = document.data!!["workType"].toString()
                     editprofilName.text = Editable.Factory.getInstance()
                         .newEditable(document.data!!["profilName"].toString())
@@ -86,25 +81,22 @@ class ProfilEditorActivity : AppCompatActivity() {
                 }
             }
 
-
-      val saveButton = findViewById<Button>(R.id.save_ButtonEdit)
+        val saveButton = findViewById<Button>(R.id.save_ButtonEdit)
         saveButton.setOnClickListener {
             uploadeImageToFirebaseStorage()
-           // uploadeUserToFirebaseDatabase()
             intent = Intent(this, ProfilActivity::class.java)
             startActivity(intent)
         }
 
+        //
         selectphoto_Image.setOnClickListener {
-            println("!!! : PHOTO")
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, 0)
         }
-
     } // OnCreate
 
-   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
             println("!!! : photo was selected")
@@ -112,15 +104,9 @@ class ProfilEditorActivity : AppCompatActivity() {
             selectedPhotoUri = data.data
 
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
-            //val bitmap = uri?.let { ImageDecoder.createSource(contentResolver, it) }
-
-            val bitmapDrawable = BitmapDrawable(bitmap)
-            // selectphoto_Image.setBackgroundDrawable(bitmapDrawable)
             selectphoto_Image.setImageBitmap(bitmap)
         }
-
     }
-
     fun uploadeImageToFirebaseStorage(){
         if (selectedPhotoUri == null) return
 
@@ -139,8 +125,9 @@ class ProfilEditorActivity : AppCompatActivity() {
                 }
             }
     }
+
+
     fun saveUserToFirebaseDatabase(selectedPhotoUri: String) {
-        println("!!! : user skapas")
         val user = auth.currentUser ?: return
         val profilInformation = Profil(
             selectedPhotoUri,
@@ -155,13 +142,8 @@ class ProfilEditorActivity : AppCompatActivity() {
             profilDescription.text.toString(),
             workType = workType
         )
-
         db.collection("Users").document(user.uid).set(profilInformation)
     }
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
-
-
-
-
 }

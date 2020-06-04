@@ -10,7 +10,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class EmployesApplicationActivity : AppCompatActivity() {
 
-    //lateinit var persons :MutableList<Profil>
     lateinit var auth: FirebaseAuth
     lateinit var db : FirebaseFirestore
     lateinit var recyclerView : RecyclerView
@@ -25,18 +24,14 @@ class EmployesApplicationActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        // hittar recyclerView
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewEmployer)
-        //
+
         recyclerView.layoutManager = LinearLayoutManager(this)
-        // skappar adaptern
+
         val adapter = EmployeApplicationRecyclerAdapter(this, persons)
-        //
+
        recyclerView.adapter = adapter
 
-
-       // db.collection("applications").document(auth.currentUser?.uid!!)
-       //db.collection("Users")
         db.collection("applications").document(auth.currentUser?.uid!!).collection("users")
             .addSnapshotListener { snapshot, e ->
             if (snapshot != null) {
@@ -50,7 +45,6 @@ class EmployesApplicationActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
     }
 

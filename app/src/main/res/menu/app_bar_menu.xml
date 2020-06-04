@@ -3,19 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/bussniesItem"
+        android:icon="@drawable/ic_business_center"
+        android:title="Affärer"/>
+    <item
         android:id="@+id/locationItem"
         android:icon="@drawable/ic_location_on"
-        android:title="Maps"
-        android:orderInCategory="4"/>
+        android:title="Maps"/>
     <item
         android:id="@+id/accountItem"
         android:icon="@drawable/ic_person"
         android:title="profil" />
 
-    <item
-        android:id="@+id/bussniesItem"
-        android:icon="@drawable/ic_business_center"
-        android:title="Affärer"/>
+
 
     <item
         android:id="@+id/messageItem"

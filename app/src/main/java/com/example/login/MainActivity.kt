@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        auth = FirebaseAuth.getInstance()
 
         try {
             this.supportActionBar!!.hide()
@@ -33,20 +34,16 @@ class MainActivity : AppCompatActivity() {
         }
         email = findViewById(R.id.email)
         password = findViewById(R.id.password)
-        auth = FirebaseAuth.getInstance()
+
         val signInButton = findViewById<Button>(R.id.signInButton)
         signInButton.setOnClickListener{
             doLogin()
         }
 
-
         signUpButton.setOnClickListener{
             startActivity(Intent(this, SignUpActivity::class.java))
         }
-
-
-
-    }
+    }//onCreate
 
     fun doLogin() {
         if (email.text.toString().isEmpty()) {
@@ -80,7 +77,6 @@ class MainActivity : AppCompatActivity() {
        super.onStart()
         val currentUser = auth.currentUser
         updateUI(currentUser)
-
     }
 
     private fun updateUI(currentUser: FirebaseUser?) {
@@ -97,7 +93,4 @@ class MainActivity : AppCompatActivity() {
             Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
-}
+}//class

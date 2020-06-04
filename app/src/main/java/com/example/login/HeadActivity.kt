@@ -2,33 +2,28 @@ package com.example.login
 
 //import DataManger
 
+import android.R
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.R.id
 import com.example.login.R.layout
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 class HeadActivity : AppCompatActivity() {
-    // initaliserar var recyclerView
     lateinit var recycleView: RecyclerView
     lateinit var auth: FirebaseAuth
     lateinit var db: FirebaseFirestore
     lateinit var value: String
-    // lateinit var fab: FloatingActionButton
-    var workType: String = "worker"
-   // lateinit var accountItem: View
+    var workType: String = ""
     var workList = mutableListOf<Work>()
 
 
@@ -36,27 +31,24 @@ class HeadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_head)
 
-
-
-
-
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
 
-        recycleView = findViewById<RecyclerView>(id.recyclerView)
-        recycleView.layoutManager = LinearLayoutManager(this)
-        recycleView.adapter = WorkRecycleAdapter(this, workList)
-
-       /* db.collection("Users").document(user!!.uid).get().addOnSuccessListener { document ->
+        // hämtar vilken typ av användare som är inloggad
+        db.collection("Users").document(user!!.uid).get().addOnSuccessListener { document ->
             if (document != null) {
                 workType = document.data?.get("workType").toString()
                 println("!!! : $workType")
                 typOfUser()
             }
-        }*/
-        typOfUser()
+        }
 
+        recycleView = findViewById<RecyclerView>(id.recyclerView)
+        recycleView.layoutManager = LinearLayoutManager(this)
+        recycleView.adapter = WorkRecycleAdapter(this, workList)
+
+            // läger till i den lokala listan från firebase
             val itemsRef = db.collection("work")
             itemsRef.addSnapshotListener { snapshot, e ->
                 if (snapshot != null) {
@@ -65,7 +57,6 @@ class HeadActivity : AppCompatActivity() {
                     val newItem = document.toObject(Work::class.java)
                     if (newItem != null) {
                         workList.add(newItem)
-
                         }
                         recycleView.adapter?.notifyDataSetChanged()
                     }
@@ -98,27 +89,16 @@ class HeadActivity : AppCompatActivity() {
             intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
-        /*signOutItem.setOnClickListener {
-            println("!!! : signout pressd")
-            alert.setTitle("Är du säker?")
-            alert.setMessage("Vill du logga ut?")
-            alert.setPositiveButton("Ja") { dialogInterface: DialogInterface, i: Int ->
-                auth.signOut()
-                intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
-            alert.setNegativeButton("Nej") { dialogInterface: DialogInterface, i: Int -> }
-            alert.show()
-        }*/
-
     }
 
+    // ändrar layouten för olika användare
     fun typOfUser() {
-       println("!!! : $workType")
         if (workType.equals("worker")){
             val fab = findViewById<FloatingActionButton>(id.floatingActionButton)
             val signOutItem = findViewById<View>(id.sign_Out_Item)
             val messageItem = findViewById<View>(id.messageItem)
+           // val menu = findViewById<BottomNavigationItemView>(R.menu.app_bar_menu)
+            //messageItem.invalidate()
             messageItem.visibility = View.GONE
             signOutItem.visibility = View.GONE
             fab.hide()
@@ -129,8 +109,9 @@ class HeadActivity : AppCompatActivity() {
             val signOutItem = findViewById<View>(id.sign_Out_Item)
             val mapsItem = findViewById<View>(id.locationItem)
             val accountItem = findViewById<View>(id.accountItem)
-            mapsItem.visibility = View.INVISIBLE
+            mapsItem.visibility = View.GONE
             accountItem.visibility = View.GONE
+            invalidateOptionsMenu()
             signOutItem.setOnClickListener {
                 println("!!! : signout pressd")
                 alert.setTitle("Är du säker?")
@@ -143,18 +124,14 @@ class HeadActivity : AppCompatActivity() {
                 alert.setNegativeButton("Nej") { dialogInterface: DialogInterface, i: Int -> }
                 alert.show()
             }
-
-
         }
     }
-
 
     //overridar och säger till adapter att uopdatera ändringarna
     override fun onResume() {
         super.onResume()
         recycleView.adapter?.notifyDataSetChanged()
     }
-
 }
 
 

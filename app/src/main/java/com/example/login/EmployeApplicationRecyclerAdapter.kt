@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,29 +31,20 @@ class EmployeApplicationRecyclerAdapter(private val context: Context, private va
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val auth = FirebaseAuth.getInstance()
-
         val db = FirebaseFirestore.getInstance()
-    val person = persons[position]
+        val person = persons[position]
         holder.textName.text = person.profilName
+
+        //raderar ansökningar
         holder.deleteButton.setOnClickListener {
-                person.documentId?.let { it1 ->
-                    db.collection("application").document(auth.currentUser?.uid!!)
-                        .collection("users").document(it1).delete().addOnSuccessListener {
-                    }
-                }
-
-        }
-        /*holder.deleteButton.setOnClickListener {
             person.documentId?.let { it1 ->
-                db.collection("application").document(auth.currentUser?.uid!!)
+                db.collection("applications").document(auth.currentUser?.uid!!)
                     .collection("users").document(it1).delete().addOnSuccessListener {
-                        println("!!! : värdet ${person.documentId}")
-                        println("!!! : värdet på it1 $it1")
+                        Toast.makeText(context, "Raderad",
+                            Toast.LENGTH_LONG).show()
                     }
-
             }
-        }*/
-
+        }
         holder.personPosition = position
     }
 
@@ -69,9 +61,7 @@ class EmployeApplicationRecyclerAdapter(private val context: Context, private va
 
             itemView.setOnClickListener {
                 val value = persons[personPosition]
-
-                println("!!!: persons $value")
-            val intent = Intent(context, DisplayApplicationProfil::class.java)
+                val intent = Intent(context, DisplayApplicationProfil::class.java)
                 //intent.putExtra(PERSON_POSiTION_KEY, personPosition)
                 intent.putExtra("AnyNameOrKey", value)
                 context.startActivity(intent)

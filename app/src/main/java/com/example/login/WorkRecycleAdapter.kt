@@ -7,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.os.persistableBundleOf
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,17 +33,21 @@ class WorkRecycleAdapter(
         val db = FirebaseFirestore.getInstance()
         val work = workList[position]
         holder.textViewTitle.text = work.title
-        holder.textViewSalary.text = work.salary.toString()
+        holder.textViewSalary.text = work.salary.toString() + " Kronor"
         holder.textViewDecription.text = work.description
+
         if (work.userUid!!.equals(auth.currentUser?.uid)){
             holder.deleteButton.visibility = View.VISIBLE
         }else{
             holder.deleteButton.visibility = View.GONE
         }
+
         holder.deleteButton.setOnClickListener {
             if (work.userUid!!.equals(auth.currentUser?.uid)) {
                 work.documentId?.let { it1 ->
                     db.collection("work").document(it1).delete().addOnSuccessListener {
+                        Toast.makeText(context, "Raderad",
+                            Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -79,26 +82,14 @@ class WorkRecycleAdapter(
 
             itemView.setOnClickListener {
                 val value = workList[workPosition]
-                    val intent = Intent(context, WorkDisplayPageActivity::class.java)
-                    intent.putExtra("WORK_KEY", value)
-                    context.startActivity(intent)
-                }
+                val intent = Intent(context, WorkDisplayPageActivity::class.java)
+                intent.putExtra("WORK_KEY", value)
+                context.startActivity(intent)
             }
         }
     }
+}
 
-
-
-
-
-/*if (work.userUid.equals(auth.uid)){
-    holder.textViewTitle.setBackgroundColor(
-        ContextCompat.getColor(
-            context,
-            R.color.colorPrimaryDark
-        )
-    )
-}*/
 
 
 

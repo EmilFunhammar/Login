@@ -2,15 +2,11 @@ package com.example.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profil.*
-import org.w3c.dom.Text
-import java.text.ParsePosition
 
 
 lateinit var language2: TextView
@@ -44,6 +40,8 @@ class DisplayApplicationProfil : AppCompatActivity() {
         profilInformation4 = findViewById<TextView>(R.id.generall4)
         val profilDescription = findViewById<TextView>(R.id.bioText)
 
+        // parcelable från annan activity
+        // sätter fälten till infon som finns i firebase
         val product = intent.getParcelableExtra<Profil>("AnyNameOrKey")
         if (product != null) {
             if (Picasso.get().load(product.userImageUri) != null) {
@@ -59,11 +57,12 @@ class DisplayApplicationProfil : AppCompatActivity() {
             profilInformation3.text = product.profilOtherInfo3
             profilInformation4.text = product.profilOtherInfo4
             profilDescription.text = product.profilDescription
-            displayPreofilPage()
+            displayProfilPage()
         }
     }
 
-    fun displayPreofilPage() {
+    // gömer ifall inte blivit ifyllda
+    fun displayProfilPage() {
         rating.rating = 4F
         if (language2.text == "") {
             lang2.visibility = View.GONE

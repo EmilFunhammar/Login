@@ -16,6 +16,8 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     var type : String? = null
+    lateinit var workerCheckBox: CheckBox
+    lateinit var employerCheckBox: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,69 +28,59 @@ class SignUpActivity : AppCompatActivity() {
             status()
             signUpUser()
         }
-
-        val employerCheckBox = findViewById<CheckBox>(R.id.checkEmployerBox)
-        val workerCheckBox = findViewById<CheckBox>(R.id.checkWorkerBox)
-
-
     }
 
     fun status(){
-       if (checkEmployerBox.isChecked){
-           type = "employer"
-       }
-        if (checkWorkerBox.isChecked){
+        employerCheckBox = findViewById<CheckBox>(R.id.checkEmployerBox)
+
+        if (employerCheckBox.isChecked){
+            type = "employer"
+        }
+        workerCheckBox = findViewById<CheckBox>(R.id.checkWorkerBox)
+        if (workerCheckBox.isChecked){
             type = "worker"
         }
         return
     }
 
-  private fun signUpUser(){
-            if (email.text.toString().isEmpty()) {
-                email.error = "ange Emailadress"
-                email.requestFocus()
-                return
+    private fun signUpUser(){
+        if (email.text.toString().isEmpty()) {
+            email.error = "ange Emailadress"
+            email.requestFocus()
+            return
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
+            email.error = "ange rätt Emailadress"
+            email.requestFocus()
+            return
+        }
+        if (password.text.toString().isEmpty()){
+            password.error = "ange lösenord"
+            password.requestFocus()
+            return
+        }
+
+        auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    user?.sendEmailVerification()
+                        ?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val db = FirebaseFirestore.getInstance()
+
+                                val profil = Profil(workType = type)
+                                db.collection("Users").document(user.uid).set(profil)
+
+                                startActivity(Intent(this, MainActivity::class.java))
+                                Log.d("mail", "Email sent.")
+                            }
+                        }
+
+                }else {
+                    Toast.makeText(baseContext, "registrering misslyckad. Try agian",
+                        Toast.LENGTH_SHORT).show()
+                }
             }
-            if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
-                email.error = "ange rätt Emailadress"
-                email.requestFocus()
-                return
-            }
-            if (password.text.toString().isEmpty()){
-                password.error = "ange lösenord"
-                password.requestFocus()
-                return
-            }
-
-      auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
-          .addOnCompleteListener(this) { task ->
-              if (task.isSuccessful) {
-                  val user = auth.currentUser
-                  user?.sendEmailVerification()
-                      ?.addOnCompleteListener { task ->
-                          if (task.isSuccessful) {
-                              val db = FirebaseFirestore.getInstance()
-
-                              val profil = Profil(workType = type)
-                              db.collection("Users").document(user.uid).set(profil)
-                                  .addOnCompleteListener { task ->
-                                      //
-                                  }
-
-                              startActivity(Intent(this, MainActivity::class.java))
-
-                              Log.d("mail", "Email sent.")
-                          }
-                      }
-
-              }else {
-                  Toast.makeText(baseContext, "registrering misslyckad. Try agian",
-                      Toast.LENGTH_SHORT).show()
-
-              }
-
-          }
-  }
-
-
+    }
 }

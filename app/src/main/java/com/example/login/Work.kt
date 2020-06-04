@@ -14,7 +14,8 @@ class Work(
     var employerEmail: String? = null,
     var userUid: String? = null,
     @DocumentId
-    var documentId : String? = null
+    var documentId: String? = null
+
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -25,7 +26,6 @@ class Work(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-       // parcel.readString(),
         parcel.readString()
 
     )
@@ -40,7 +40,6 @@ class Work(
             dest.writeString(employerPhoneNumber)
             dest.writeString(employerEmail)
             dest.writeString(userUid)
-            //dest.writeString(documentId)
         }
     }
 

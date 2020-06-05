@@ -40,9 +40,6 @@ class ProfilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profil)
 
-
-
-
         try {
             this.supportActionBar!!.hide()
         } catch (e: NullPointerException) {
@@ -72,18 +69,6 @@ class ProfilActivity : AppCompatActivity() {
 
             }
         }
-
-        val docRef = db.collection("Users").document(user!!.uid)
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val newItem = document.toObject(Profil::class.java)
-                    println("!!!: emild ${newItem}")
-                    if (newItem != null) {
-                        setProfilInfo(newItem)
-                    }
-                }
-            }
 
         val mapsItem = findViewById<View>(R.id.locationItem)
         mapsItem.setOnClickListener {
@@ -129,6 +114,16 @@ class ProfilActivity : AppCompatActivity() {
             intent = Intent(this, ProfilEditorActivity::class.java)
             startActivity(intent)
         }
+        val docRef = db.collection("Users").document(user!!.uid)
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val newItem = document.toObject(Profil::class.java)
+                    if (newItem != null) {
+                        setProfilInfo(newItem)
+                    }
+                }
+            }
     }
 
     //ger Textview text

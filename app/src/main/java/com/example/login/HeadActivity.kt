@@ -97,8 +97,6 @@ class HeadActivity : AppCompatActivity() {
             val fab = findViewById<FloatingActionButton>(id.floatingActionButton)
             val signOutItem = findViewById<View>(id.sign_Out_Item)
             val messageItem = findViewById<View>(id.messageItem)
-           // val menu = findViewById<BottomNavigationItemView>(R.menu.app_bar_menu)
-            //messageItem.invalidate()
             messageItem.visibility = View.GONE
             signOutItem.visibility = View.GONE
             fab.hide()

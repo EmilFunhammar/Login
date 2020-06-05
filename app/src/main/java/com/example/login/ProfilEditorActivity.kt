@@ -84,8 +84,8 @@ class ProfilEditorActivity : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.save_ButtonEdit)
         saveButton.setOnClickListener {
             uploadeImageToFirebaseStorage()
-            intent = Intent(this, ProfilActivity::class.java)
-            startActivity(intent)
+            //intent = Intent(this, ProfilActivity::class.java)
+            //startActivity(intent)
         }
 
         //
@@ -142,7 +142,9 @@ class ProfilEditorActivity : AppCompatActivity() {
             profilDescription.text.toString(),
             workType = workType
         )
-        db.collection("Users").document(user.uid).set(profilInformation)
+        db.collection("Users").document(user.uid).set(profilInformation).addOnCompleteListener {
+            intent = Intent(this, ProfilActivity::class.java)
+        startActivity(intent)}
     }
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)

@@ -34,8 +34,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
 
         val work2 = LatLng(59.479319, 18.322222)
         mMap.addMarker(MarkerOptions().position(work2).title("Jobb2"))
-
         val work3 = LatLng(59.483901, 18.306179)
+
         mMap.addMarker(MarkerOptions().position(work3).title("Jobb3"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(work3))
 

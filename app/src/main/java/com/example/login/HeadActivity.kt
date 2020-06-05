@@ -2,7 +2,6 @@ package com.example.login
 
 //import DataManger
 
-import android.R
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -102,7 +101,6 @@ class HeadActivity : AppCompatActivity() {
             fab.hide()
         }
         if (workType.equals("employer")){
-            val fab = findViewById<FloatingActionButton>(id.floatingActionButton)
             val alert = AlertDialog.Builder(this)
             val signOutItem = findViewById<View>(id.sign_Out_Item)
             val mapsItem = findViewById<View>(id.locationItem)
